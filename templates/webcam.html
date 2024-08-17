@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam</title>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Webcam</h1>
+    <div>
+        <img id="webcam_feed" src="{{ url_for('webcam_feed') }}" style="width: 100%; height: auto;">
+    </div>
+    <div>
+        <button onclick="stopWebcam()">Stop Webcam</button>
+        <button onclick="goToHomepage()">Homepage</button>
+        <button onclick="togglePreview()">Toggle Preview</button>
+        <button onclick="toggleFlipH()">Flip Horizontal</button>
+        <button onclick="toggleRunModel()">Toggle Model Run</button>
+    </div>
+
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        // Function to stop webcam
+        function stopWebcam() {
+            $.ajax({
+                url: '/stop_webcam',
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                }
+            });
+        }
+
+        // Function to navigate to homepage
+        function goToHomepage() {
+            window.location.href = '/';
+        }
+
+        // Function to toggle preview
+        function togglePreview() {
+            $.ajax({
+                url: '/request_preview_switch',
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                }
+            });
+        }
+
+        // Function to toggle flip horizontal
+        function toggleFlipH() {
+            $.ajax({
+                url: '/request_flipH_switch',
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                }
+            });
+        }
+
+        // Function to toggle run model
+        function toggleRunModel() {
+            $.ajax({
+                url: '/request_run_model_switch',
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                }
+            });
+        }
+
+        // Listen for label events
+        socket.on('label', function(data) {
+            console.log('Received label:', data);
+            // Process labels as needed
+        });
+    </script>
+</body>
+</html>
